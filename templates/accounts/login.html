@@ -1,0 +1,12 @@
+{% block content %}
+<h2>تسجيل الدخول</h2>
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="username" placeholder="اسم المستخدم" required>
+    <input type="password" name="password" placeholder="كلمة المرور" required>
+    <button type="submit">دخول</button>
+</form>
+{% if error %}
+<p>{{ error }}</p>
+{% endif %}
+{% endblock content %}

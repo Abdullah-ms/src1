@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<nav class="navbar navbar-light bg-light">
+    <span class="navbar-brand mb-0 h1">{{ company.name }} - Sections</span>
+    <a class="btn btn-outline-secondary" href="{% url 'dashboard' %}">Back to Dashboard</a>
+</nav>
+
+<div class="container mt-4">
+    <div class="row">
+        {% for section in sections %}
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">{{ section.name }}</h5>
+                    <a href="{% url 'section_categories' section.id %}" class="btn btn-primary">View Categories</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

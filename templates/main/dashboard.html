@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<nav class="navbar navbar-light bg-light">
+    <span class="navbar-brand mb-0 h1">Dashboard</span>
+    <form class="form-inline" action="{% url 'logout' %}" method="POST">
+        {% csrf_token %}
+        <button class="btn btn-outline-danger" type="submit">Logout</button>
+    </form>
+</nav>
+
+<div class="container mt-4">
+    <div class="row">
+        {% for company in companies %}
+        <div class="col-md-4">
+            <a href="{% url 'company_sections' company.id %}" class="card mb-4 text-decoration-none" style="color: inherit;">
+                <img src="{{ company.logo.url }}" class="card-img-top" alt="{{ company.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ company.name }}</h5>
+                    <p class="card-text">{{ company.description }}</p>
+                    <a href="{% url 'company_sections' company.id %}" class="btn btn-primary">View Sections</a>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
