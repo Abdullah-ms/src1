@@ -4,14 +4,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}My Dashboard{% endblock %}</title>
+    <link rel="icon" href="{% static 'img/logo.png' %}">
+    <title>KB</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+    body {
+        background: linear-gradient(120deg, #020024, #820a0a, #192074);
+        background-size: 250% 250%;
+        animation: gradient 10s ease infinite;
+        color: #ffffff;
+        position: relative;
+        overflow: hidden;
+    }
+    @keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    .bubble {
+        position: absolute;
+        bottom: -80px;
+        width: 60px;
+        height: 60px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        animation: rise 10s infinite ease-in-out;
+    }
+    .bubble:nth-child(1) {
+        left: 10%;
+        animation-duration: 8s;
+        animation-delay: 2s;
+    }
+    .bubble:nth-child(2) {
+        left: 20%;
+        animation-duration: 10s;
+        animation-delay: 4s;
+    }
+    .bubble:nth-child(3) {
+        left: 30%;
+        animation-duration: 12s;
+        animation-delay: 6s;
+    }
+    .bubble:nth-child(4) {
+        left: 40%;
+        animation-duration: 14s;
+        animation-delay: 8s;
+    }
+    .bubble:nth-child(5) {
+        left: 50%;
+        animation-duration: 16s;
+        animation-delay: 10s;
+    }
+    .bubble:nth-child(6) {
+        left: 60%;
+        animation-duration: 18s;
+        animation-delay: 12s;
+    }
+    .bubble:nth-child(7) {
+        left: 70%;
+        animation-duration: 20s;
+        animation-delay: 14s;
+    }
+    .bubble:nth-child(8) {
+        left: 80%;
+        animation-duration: 22s;
+        animation-delay: 16s;
+    }
+    .bubble:nth-child(9) {
+        left: 90%;
+        animation-duration: 24s;
+        animation-delay: 18s;
+    }
+    @keyframes rise {
+        0% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(-800px);
+            opacity: 0;
+        }
+    }
+    .card {
+        border: none;
+        border-radius: 10px;
+        transition: transform 0.2s;
+    }
+    .card:hover {
+        transform: scale(1.05);
+    }
+    .card-img-top {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+    .card-title {
+        color: blue;
+    }
+    .btn-light {
+        background-color: #ffffff;
+        border: none;
+        color: #007bff;
+    }
+    .btn-light:hover {
+        background-color: #e2e6ea;
+    }
+    header {
+        border-radius: 10px;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 1rem;
+    }
+    .ml-3 {
+        margin-left: 1rem;
+    }
+    .header-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #ffffff;
+    }
+    .header-logo {
+        display: flex;
+        align-items: center;
+    }
+    .header-logo img {
+        margin-right: 10px;
+    }
+</style>
 </head>
 <body>
-    <div class="container">
-        {% block content %}
-        {% endblock %}
-    </div>
+<div class="container">
+    {% block content %}
+    {% endblock %}
+</div>
 </body>
 </html>
 

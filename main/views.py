@@ -5,33 +5,49 @@ from main.models import Company, Section, Category, Article, SubArticle
 
 @login_required
 def dashboard(request):
-    companies = request.user.companies.all()
+    """عرض الشركات الخاصة بالمستخدم."""
+    companies = request.user.companies.all()  # الشركات الخاصة بالمستخدم
     return render(request, 'main/dashboard.html', {'companies': companies})
 
 
 @login_required
 def company_sections(request, company_id):
+    """عرض الأقسام الخاصة بالشركة المختارة."""
     company = get_object_or_404(Company, id=company_id)
-    sections = Section.objects.filter(company=company)
+
+    # التحقق من أن الشركة تابعة للمستخدم
+    if company not in request.user.companies.all():
+        return render(request, 'main/403.html')
+
+    sections = Section.objects.filter(company=company)  # الأقسام الخاصة بالشركة
     return render(request, 'main/company_sections.html', {'company': company, 'sections': sections})
 
 
 @login_required
 def section_categories(request, section_id):
+    """عرض الفئات والمقالات الخاصة بالقسم."""
     section = get_object_or_404(Section, id=section_id)
-    categories = Category.objects.filter(section=section)
+
+    # التحقق من أن القسم تابع لشركة تابعة للمستخدم
+    if section.company not in request.user.companies.all():
+        return render(request, 'main/403.html')
+
+    categories = Category.objects.filter(section=section)  # الفئات الخاصة بالقسم
     return render(request, 'main/section_categories.html', {'section': section, 'categories': categories})
-
-
-@login_required
-def category_articles(request, category_id):
-    category = get_object_or_404(Category, id=category_id)
-    articles = Article.objects.filter(category=category)
-    return render(request, 'main/category_articles.html', {'category': category, 'articles': articles})
 
 
 @login_required
 def article_sub_articles(request, article_id):
     article = get_object_or_404(Article, id=article_id)
+
+    # التحقق من أن المقالة مرتبطة بقسم مرتبط بشركة تابعة للمستخدم
+    related_sections = article.category.section.all()  # الفئات قد تكون مرتبطة بعدة أقسام
+    user_companies = request.user.companies.all()
+
+    # التحقق من أن القسم المرتبط بالمقالة مرتبط بشركة للمستخدم
+    if not any(section.company in user_companies for section in related_sections):
+        return render(request, 'main/403.html')
+
+    # عرض المقالات الفرعية إذا كان التحقق ناجحاً
     sub_articles = SubArticle.objects.filter(article=article)
     return render(request, 'main/article_sub_articles.html', {'article': article, 'sub_articles': sub_articles})

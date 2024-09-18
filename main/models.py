@@ -1,4 +1,5 @@
 from django.db import models
+from ckeditor_uploader.fields import RichTextUploadingField
 from django.utils.text import slugify
 
 class Company(models.Model):
@@ -81,7 +82,7 @@ class Article(models.Model):
 #--------------------------------------------------
 class SubArticle(models.Model):
     title = models.CharField(max_length=255)
-    content = models.TextField()
+    content = RichTextUploadingField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)

@@ -1,25 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<nav class="navbar navbar-light bg-light">
-    <span class="navbar-brand mb-0 h1">{{ article.title }} - Sub-Articles</span>
-    <a class="btn btn-outline-secondary" href="{% url 'category_articles' article.category.id %}">Back to Articles</a>
-</nav>
-
-<div class="container mt-4">
+<div class="container mt-5">
+    <h2>Sub-Articles in {{ article.title }}</h2>
     <div class="row">
         {% for sub_article in sub_articles %}
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h5 class="card-title">{{ sub_article.title }}</h5>
-                    <details>
-                        <summary>Read More</summary>
-                        <p>{{ sub_article.content }}</p>
-                    </details>
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ sub_article.title }}</h5>
+                        <p class="card-text">{{ sub_article.content|safe }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
         {% endfor %}
     </div>
 </div>

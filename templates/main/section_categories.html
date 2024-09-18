@@ -1,23 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<nav class="navbar navbar-light bg-light">
-    <span class="navbar-brand mb-0 h1">{{ section.name }} - Categories</span>
-    <a class="btn btn-outline-secondary" href="{% url 'company_sections' section.company.id %}">Back to Sections</a>
-</nav>
-
-<div class="container mt-4">
+<div class="container mt-5">
+    <h2>Categories in {{ section.name }}</h2>
     <div class="row">
         {% for category in categories %}
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h5 class="card-title">{{ category.name }}</h5>
-                    <a href="{% url 'category_articles' category.id %}" class="btn btn-primary">View Articles</a>
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <img src="{{ category.logo.url }}" class="card-img-top" alt="{{ category.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ category.name }}</h5>
+                        <ul class="list-group list-group-flush">
+                            {% for article in category.article_set.all %}
+                                <li class="list-group-item">
+                                    <a href="{% url 'article_subarticles' article.id %}">{{ article.title }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
         {% endfor %}
     </div>
 </div>
+
 {% endblock %}

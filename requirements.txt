@@ -3,6 +3,9 @@ Django==5.1
 django-ckeditor==6.7.1
 django-ckeditor-5==0.2.13
 django-js-asset==2.2.0
+#mysqlclient==2.2.4
+#PyMySQL==1.1.1
+psycopg2==2.9.9
 pillow==10.4.0
 sqlparse==0.5.1
 tzdata==2024.1
