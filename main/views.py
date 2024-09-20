@@ -51,3 +51,23 @@ def article_sub_articles(request, article_id):
     # عرض المقالات الفرعية إذا كان التحقق ناجحاً
     sub_articles = SubArticle.objects.filter(article=article)
     return render(request, 'main/article_sub_articles.html', {'article': article, 'sub_articles': sub_articles})
+
+
+@login_required
+def search_results(request):
+    query = request.GET.get('query')
+    if query:
+        articles = Article.objects.filter(title__icontains=query)
+        sub_articles = SubArticle.objects.filter(title__icontains=query)
+    else:
+        articles = []
+        sub_articles = []
+
+    return render(request, 'main/search_results.html',
+                  {'articles': articles, 'sub_articles': sub_articles, 'query': query})
+
+
+def sub_article_detail(request, sub_article_id):
+    sub_article = get_object_or_404(SubArticle, id=sub_article_id)
+    article = sub_article.article
+    return render(request, 'main/sub_article_detail.html', {'article': article, 'sub_article': sub_article})

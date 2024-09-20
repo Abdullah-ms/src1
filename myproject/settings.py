@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-1o4)te6a(+wie!se$)t_crxyi(s#q9qt8o24bqa^1*t5ux=so$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # سنستبدل جدول User الافتراضي بـ CustomUser في صفحة الإدارة
 AUTH_USER_MODEL = 'accounts.CustomUser'
@@ -54,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'myproject.urls'
@@ -124,12 +125,14 @@ USE_TZ = True
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'myproject/static')
-]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'myproject/static')]
+
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = 'media/'
+
+
+
 
 # ck-editor settings :
 CKEDITOR_UPLOAD_PATH = "uploads/"  # مسار تخزين الصور المرفوعة

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+             direction: rtl;
+        text-align: right;
+        }
+        h1 {
+            color: #333;
+        }
+        h2 {
+            color: #555;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+        }
+        a {
+            text-decoration: none;
+            color: #1a73e8;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .highlight {
+            background-color: yellow;
+        }
+    </style>
+</head>
+<body>
+<h1>Search Results for "{{ query }}"</h1>
+{% if articles or sub_articles %}
+<h2>Articles</h2>
+<ul>
+    {% for article in articles %}
+    <li>
+        <a href="{% url 'article_detail' article.id %}">{{ article.title }}</a>
+        <ul>
+            {% for sub_article in article.sub_articles %}
+            <li>
+                <h3>{{ sub_article.title }}</h3>
+                <p>{{ sub_article.content|safe }}</p>
+                <p><strong>Category:</strong> {{ sub_article.category.name }}</p>
+                <p><strong>Section:</strong> {{ sub_article.section.name }}</p>
+                <p><strong>Company:</strong> {{ sub_article.company.name }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </li>
+    {% endfor %}
+</ul>
+
+<h2>Sub Articles</h2>
+<ul>
+    {% for sub_article in sub_articles %}
+    <li>
+        <h3>{{ sub_article.title }}</h3>
+        <p>{{ sub_article.content|safe }}</p>
+        <p style="color:grey"><small><i>Article:</i> {{ sub_article.article.title }}</small></p>
+        <p style="color:grey"><small><i>Category:</i>{{ sub_article.article.category.name }}</small></p>
+        <p style="color:grey"><small><i>created_at:</i> {{ sub_article.created_at }}</small></p>
+        <p style="color:grey"><small><i>updated_at:</i> {{ sub_article.updated_at }}</small></p>
+    </li>
+    <hr>
+    {% endfor %}
+</ul>
+{% else %}
+<p>There are no results matching your search.</p>
+{% endif %}
+</body>
+</html>

@@ -1,19 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container mt-5">
-    <h2>Sections in {{ company.name }}</h2>
+    <h2 class="card-title" style=" font-weight: bold;">{{ company.name }} sections</h2>
+    <hr>
+    <br>
     <div class="row">
         {% for section in sections %}
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <img src="{{ section.logo.url }}" class="card-img-top" alt="{{ section.name }}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ section.name }}</h5>
-                        <p class="card-text">{{ section.description }}</p>
-                        <a href="{% url 'section_categories' section.id %}" class="btn btn-primary">View Categories</a>
-                    </div>
+        <div class="col-md-4">
+            <a href="{% url 'section_categories' section.id %}" class="card mb-4 shadow-sm text-decoration-none text-dark">
+                <img src="{{ section.logo.url }}" class="card-img-top" alt="{{ section.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ section.name|capfirst }}</h5>
+                    <p class="card-text">{{ section.description|capfirst }}</p>
                 </div>
-            </div>
+            </a>
+        </div>
         {% endfor %}
     </div>
 </div>

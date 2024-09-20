@@ -2,24 +2,26 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h2>Categories in {{ section.name }}</h2>
+    <h2 style="font-weight: bold;">{{ section.name|capfirst }}</h2>
+    <hr>
+    <br>
     <div class="row">
         {% for category in categories %}
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <img src="{{ category.logo.url }}" class="card-img-top" alt="{{ category.name }}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ category.name }}</h5>
-                        <ul class="list-group list-group-flush">
-                            {% for article in category.article_set.all %}
-                                <li class="list-group-item">
-                                    <a href="{% url 'article_subarticles' article.id %}">{{ article.title }}</a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ category.name }}</h5>
+                    <hr>
+                    <ul class="list-group list-group-flush">
+                        {% for article in category.article_set.all %}
+                        <li class="list-group-item">
+                            <a href="{% url 'article_subarticles' article.id %}">{{ article.title }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
+        </div>
         {% endfor %}
     </div>
 </div>
