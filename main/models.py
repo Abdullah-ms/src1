@@ -2,6 +2,7 @@ from django.db import models
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.utils.text import slugify
 
+
 class Company(models.Model):
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField()
@@ -20,7 +21,9 @@ class Company(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
-#--------------------------------------------------
+
+
+# --------------------------------------------------
 class Section(models.Model):
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField()
@@ -40,7 +43,9 @@ class Section(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
-#--------------------------------------------------
+
+
+# --------------------------------------------------
 class Category(models.Model):
     name = models.CharField(max_length=255)
     logo = models.ImageField(upload_to='categories_logos/')
@@ -59,15 +64,19 @@ class Category(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
-#--------------------------------------------------
+
+
+# --------------------------------------------------
 class Article(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    section = models.ManyToManyField(Section)
     title = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     slug = models.SlugField(unique=True, blank=True)
     logo = models.ImageField(upload_to='articles_logos/')
     is_active = models.BooleanField(default=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
 
     class Meta:
         ordering = ['title']
@@ -79,7 +88,9 @@ class Article(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
-#--------------------------------------------------
+
+
+# --------------------------------------------------
 class SubArticle(models.Model):
     title = models.CharField(max_length=255)
     content = RichTextUploadingField()
@@ -88,6 +99,8 @@ class SubArticle(models.Model):
     is_active = models.BooleanField(default=True)
     slug = models.SlugField(unique=True, blank=True)
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, default='1')
+    section = models.ForeignKey(Section, on_delete=models.CASCADE, default='1')
 
     class Meta:
         ordering = ['title']

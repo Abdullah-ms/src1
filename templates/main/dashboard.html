@@ -10,7 +10,7 @@
     <div class="row">
         {% for company in companies %}
         <div class="col-md-4">
-            <a href="{% url 'company_sections' company.id %}" class="text-decoration-none " style="color:#212121">
+            <a href="{% url 'section_list' company.id %}" class="text-decoration-none " style="color:#212121">
                 <div class="card mb-4 shadow-sm">
                     <img src="{{ company.logo.url }}" class="card-img-top" alt="{{ company.name }}">
                     <div class="card-body">

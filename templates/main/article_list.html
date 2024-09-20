@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Articles in {{ category.name }} ({{ section.name }})</h1>
+
+  <div class="article-list">
+    {% for article in articles %}
+      <div class="article-card">
+        <a href="{% url 'subarticle_list' article.id category.id section.id %}">
+          <img src="{{ article.logo.url }}" alt="{{ article.title }} Logo">
+          <h2>{{ article.title }}</h2>
+          <p>Created at: {{ article.created_at|date:"F d, Y" }}</p>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+
+{% endblock %}

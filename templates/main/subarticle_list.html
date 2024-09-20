@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Sub-Articles in {{ article.title }}</h1>
+
+  <div class="subarticle-list">
+    {% for subarticle in subarticles %}
+      <div class="subarticle-card">
+        <details>
+          <summary>{{ subarticle.title }}</summary>
+          <div class="subarticle-content">
+            {{ subarticle.content|safe }}
+          </div>
+          <p>Created at: {{ subarticle.created_at|date:"F d, Y" }}</p>
+        </details>
+      </div>
+    {% endfor %}
+  </div>
+
+{% endblock %}

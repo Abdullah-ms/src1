@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Sections in {{ company.name }}</h1>
+
+  <div class="section-list">
+    {% for section in sections %}
+      <div class="section-card">
+        <a href="{% url 'category_list' section.id %}">
+          <img src="{{ section.logo.url }}" alt="{{ section.name }} Logo">
+          <h2>{{ section.name }}</h2>
+          <p>{{ section.description }}</p>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+
+{% endblock %}

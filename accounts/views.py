@@ -22,7 +22,7 @@ def user_login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('dashboard')  # توجيه إلى الصفحة الرئيسية
+            return redirect('company_list')  # توجيه إلى الصفحة الرئيسية
         else:
             return render(request, 'accounts/login.html', {'error': 'Invalid credentials'})
     return render(request, 'accounts/login.html')
