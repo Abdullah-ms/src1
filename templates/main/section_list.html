@@ -1,18 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Sections in {{ company.name }}</h1>
-
-  <div class="section-list">
-    {% for section in sections %}
-      <div class="section-card">
-        <a href="{% url 'category_list' section.id %}">
-          <img src="{{ section.logo.url }}" alt="{{ section.name }} Logo">
-          <h2>{{ section.name }}</h2>
-          <p>{{ section.description }}</p>
-        </a>
-      </div>
-    {% endfor %}
-  </div>
-
+<div class="container mt-4">
+    <h3 class="mb-4">Sections in {{ company.name|capfirst }}</h3>
+    <div class="row">
+        {% for section in sections %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card h-100">
+                <a href="{% url 'category_list' section.id %}" class="stretched-link text-decoration-none">
+                    <img src="{{ section.logo.url }}" alt="{{ section.name }} Logo" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title font-weight-bold">{{ section.name|capfirst }}</h5>
+                        <p class="card-text">{{ section.description|capfirst }}</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

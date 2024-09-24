@@ -1,26 +1,43 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2 class="gradient-text">Hi, {{ user.username }}</h2>
-<hr>
-<br>
-<div class="company-list">
-    {% for company in companies %}
-    <div class="company-card">
-        <a href="{% url 'section_list' company.id %}">
-            <img src="{{ company.logo.url }}" alt="{{ company.name }} Logo" class="company-logo">
-            <h2>{{ company.name }}</h2>
-        </a>
-        <p>{{ company.description }}</p>
-        <p>Founded: {{ company.founded_date|date:"F d, Y" }}</p>
-        {% if company.is_active %}
-        <span class="active-status">Active</span>
-        {% else %}
-        <span class="inactive-status">Inactive</span>
-        {% endif %}
+<div class="container mt-4">
+    <h4 class="gradient-text text-center">ıllıllı⭐🌟 {{ greeting|capfirst }}, {{ user.username }} 🌟⭐ıllıllı</h4>
+    <br>
+    {% if wisdom %}
+    <div class="ticker-wrap">
+        <div class="ticker">
+            <div class="ticker-item"><span style="color:lightblue">Wisdom of the day:</span> {{ wisdom.text|capfirst }}
+                - <small style="grey"><span style="color:lightblue">{{ wisdom.author|capfirst }}</span></small></div>
+        </div>
     </div>
-    {% empty %}
-    <p>No companies available at the moment.</p>
-    {% endfor %}
+    {% endif %}
+    <br>
+    <div class="row">
+        {% for company in companies %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <a href="{% url 'section_list' company.id %}" class="stretched-link text-decoration-none">
+                    <img src="{{ company.logo.url }}" alt="{{ company.name }} Logo" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title font-weight-bold">{{ company.name|capfirst }}</h5>
+                        <p class="card-text">{{ company.description|capfirst }}</p>
+                        <p class="card-text"><small class="text-muted">Founded: {{ company.founded_date|date:"F d, Y"
+                            }}</small></p>
+                        {% if company.is_active %}
+                        <span class="badge badge-success">Active</span>
+                        {% else %}
+                        <span class="badge badge-secondary">Inactive</span>
+                        {% endif %}
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p class="text-center">No companies available at the moment.</p>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

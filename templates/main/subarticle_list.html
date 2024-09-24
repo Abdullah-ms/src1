@@ -1,20 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Sub-Articles in {{ article.title }}</h1>
-
-  <div class="subarticle-list">
-    {% for subarticle in subarticles %}
-      <div class="subarticle-card">
-        <details>
-          <summary>{{ subarticle.title }}</summary>
-          <div class="subarticle-content">
-            {{ subarticle.content|safe }}
-          </div>
-          <p>Created at: {{ subarticle.created_at|date:"F d, Y" }}</p>
-        </details>
-      </div>
-    {% endfor %}
-  </div>
-
+<div class="container mt-4" dir="rtl">
+    <h1 class="text-center mb-4">Sub-Articles in ({{ article.title|capfirst }})</h1>
+    <div class="row">
+        {% for subarticle in subarticles %}
+        <div class="col-12 mb-4">
+            <div class="card h-100" data-bs-theme="{% cycle 'light' 'dark' %}">
+                <details>
+                    <summary class="card-header">{{ forloop.counter }}. {{ subarticle.title }}</summary>
+                    <div class="card-body">
+                        <div class="subarticle-content">
+                            {{ subarticle.content|safe }}
+                        </div>
+                        <p class="card-text"><small class="text-muted">Created at: {{ subarticle.created_at|date:"F d, Y" }}</small></p>
+                    </div>
+                </details>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

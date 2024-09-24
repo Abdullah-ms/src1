@@ -1,13 +1,33 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from main.models import Company, Section, Category, Article, SubArticle
+from datetime import datetime
+from wisdom.views import daily_wisdom
 
 
 # عرض الشركات الخاصة بالمستخدم
 @login_required
 def company_list(request):
+    wisdom = daily_wisdom()
+
+    current_hour = datetime.now().hour
+    if current_hour < 12:
+        greeting = "Good morning"
+    elif 12 <= current_hour < 18:
+        greeting = "Good afternoon"
+    else:
+        greeting = "Good evening"
+
     companies = request.user.companies.all()  # الشركات الخاصة بالمستخدم
-    return render(request, 'main/company_list.html', {'companies': companies})
+
+    context = {
+        'wisdom': wisdom,
+        'greeting': greeting,
+        # إضافة أي بيانات أخرى تحتاجها لعرض الشركة
+        'companies': companies,
+    }
+
+    return render(request, 'main/company_list.html', context)
 
 
 # عرض الأقسام الخاصة بالشركة
@@ -24,10 +44,6 @@ def section_list(request, company_id):
     }
     return render(request, 'main/section_list.html', context)
 
-
-# عرض الأصناف الخاصة بالقسم
-from django.shortcuts import render, get_object_or_404
-from .models import Section, Category
 
 def category_list(request, section_id):
     # الحصول على القسم باستخدام المعرّف
@@ -80,6 +96,7 @@ def subarticle_list(request, article_id, category_id, section_id):
     }
     return render(request, 'main/subarticle_list.html', context)
 
+
 @login_required
 def search_results(request):
     query = request.GET.get('query')
@@ -98,3 +115,18 @@ def sub_article_detail(request, sub_article_id):
     sub_article = get_object_or_404(SubArticle, id=sub_article_id)
     article = sub_article.article
     return render(request, 'main/sub_article_detail.html', {'article': article, 'sub_article': sub_article})
+
+
+# -------------------
+
+def greeting_view(request):
+    current_hour = datetime.now().hour
+    if current_hour < 12:
+        greeting = "Good morning"
+    elif 12 <= current_hour < 18:
+        greeting = "Good afternoon"
+    else:
+        greeting = "Good evening"
+
+    context = {'greeting': greeting}
+    return render(request, 'greeting.html', context)

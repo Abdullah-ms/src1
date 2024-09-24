@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'main.apps.MainConfig',
     'employee.apps.EmployeeConfig',
     'accounts.apps.AccountsConfig',
+    'wisdom.apps.WisdomConfig',
     'ckeditor',
     'ckeditor_uploader',
     'django.contrib.admin',
