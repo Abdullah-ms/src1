@@ -10,8 +10,6 @@ urlpatterns = [
          name='subarticle_list'),
 
     path('search/', views.search_results, name='search_results'),
-
-    path('sub-article/<int:sub_article_id>/', views.sub_article_detail, name='sub_article_detail'),
-    # ----------------
-    path('greeting/', views.greeting_view, name='greeting'),
+    path('history/', views.subarticle_history_list, name='subarticle_history_list'),
+    path('subarticle/<int:subarticle_id>/', views.subarticle_detail, name='subarticle_detail'),
 ]

@@ -3,19 +3,15 @@
 {% block content %}
 <div class="container mt-4">
     <h3 class="text-center mb-4">Articles in > ({{ category.name|capfirst }}) > ({{ section.name|capfirst }})</h3>
-    <div class="row">
+    <ul class="list-group list-group-horizontal">
         {% for article in articles %}
-        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-            <div class="card h-100">
-                <a href="{% url 'subarticle_list' article.id category.id section.id %}" class="stretched-link text-decoration-none">
-                     <!-- <img src="{{ article.logo.url }}" alt="{{ article.title }} Logo" class="card-img-top"> -->
-                    <div class="card-body">
-                        <h5 class="card-title text-center ">{{ article.title }}</h5>
-                    </div>
-                </a>
-            </div>
-        </div>
+        <li class="list-group-item d-flex align-items-center">
+            <a href="{% url 'subarticle_list' article.id category.id section.id %}" class="text-decoration-none d-flex align-items-center">
+                <img src="{{ article.logo.url }}" alt="{{ article.title }} Logo" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
+                <span class="ml-3">{{ article.title }}</span>
+            </a>
+        </li>
         {% endfor %}
-    </div>
+    </ul>
 </div>
 {% endblock %}

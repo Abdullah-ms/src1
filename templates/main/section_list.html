@@ -8,7 +8,7 @@
         <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
             <div class="card h-100">
                 <a href="{% url 'category_list' section.id %}" class="stretched-link text-decoration-none">
-                    <img src="{{ section.logo.url }}" alt="{{ section.name }} Logo" class="card-img-top">
+                    <img src="{{ section.logo.url }}" alt="{{ section.name }} Logo" class="card-img-top img-fluid" style="object-fit: cover; height: 300px;">
                     <div class="card-body">
                         <h5 class="card-title font-weight-bold">{{ section.name|capfirst }}</h5>
                         <p class="card-text">{{ section.description|capfirst }}</p>

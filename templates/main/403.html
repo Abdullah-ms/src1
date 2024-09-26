@@ -1,16 +1,51 @@
-<!-- main/templates/main/403.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error:403</title>
+    <title>Error: 403 Forbidden</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body, html {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f9fa;
+        }
+        .error-container {
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .error-container h2 {
+            font-size: 2.5rem;
+            color: #dc3545;
+        }
+        .error-container p {
+            font-size: 1.2rem;
+            color: #6c757d;
+        }
+        .error-container a {
+            margin-top: 20px;
+            display: inline-block;
+            font-size: 1rem;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .error-container a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-<div class="container mt-5">
+<div class="error-container">
     <h2>403 Forbidden</h2>
     <p>You do not have permission to access this resource.</p>
+    <a href="/">Return to Home</a>
 </div>
 </body>
 </html>

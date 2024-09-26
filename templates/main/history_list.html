@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<br>
+<h2 style="direction: rtl;">History of updates : </h2>
+<br>
+<div style="direction: rtl;">
+    {% for subarticle in subarticles %}
+    <div class="subarticle-card" data-updated-at="{{ subarticle.updated_at|date:'Y-m-d' }}">
+        <h4 class="subarticle-title">{{ subarticle.title }}</h4>
+        <p class="subarticle-updated-at"><strong>last update:</strong> {{ subarticle.updated_at|date:"Y-m-d H:i:s" }}</p>
+        <small class="subarticle-details">
+            <strong>Section :</strong> {{ subarticle.section.name }}  -->   
+            <strong>Category :</strong> {{ subarticle.article.category.name }}   -->  
+            <strong>Article :</strong> {{ subarticle.article.title }}
+        </small>
+    </div>
+    {% empty %}
+    <p>There are no updates.</p>
+    {% endfor %}
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const today = moment().format('YYYY-MM-DD');
+        const cards = document.querySelectorAll('.subarticle-card');
+
+        cards.forEach(card => {
+            const updatedAt = card.getAttribute('data-updated-at').trim();
+            const title = card.querySelector('.subarticle-title');
+            const updatedAtElement = card.querySelector('.subarticle-updated-at');
+            const details = card.querySelector('.subarticle-details');
+
+            if (updatedAt === today) {
+                title.style.color = 'green';
+                updatedAtElement.style.color = 'green';
+                details.style.color = 'green';
+                card.style.borderColor = 'green';
+            } else {
+                title.style.color = 'grey';
+                updatedAtElement.style.color = 'grey';
+                details.style.color = 'grey';
+                card.style.borderColor = 'grey';
+            }
+        });
+    });
+</script>
+
+<style>
+    .subarticle-card {
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .subarticle-title {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+    .subarticle-updated-at {
+        font-size: 1em;
+        margin-top: 10px;
+    }
+    .subarticle-details {
+        font-size: 0.9em;
+        margin-top: 10px;
+    }
+</style>
+{% endblock %}

@@ -1,6 +1,9 @@
 from django.contrib import admin
 from .models import Section, Shift, Schedule, DirectManager, Status, Role, Employee
+from django.contrib.auth.models import Permission
 
+
+admin.site.register(Permission)
 
 @admin.register(Section)
 class SectionAdmin(admin.ModelAdmin):
