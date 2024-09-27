@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Hi , <span class="gradient-text">{{ user.username }}</span></h2><span> your opinion matters to us. Please share your thoughts and help us improve our services. Thank you for taking the time to provide your valuable input!</span>
+    <br>
+    <hr>
+    <form method="POST" class="needs-validation" novalidate>
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="company">Select Company:</label>
+            <select name="company" id="company" class="form-control" required>
+                <option value="">-- Choose a Company --</option>
+                {% for company in companies %}
+                <option value="{{ company.id }}">{{ company.name }}</option>
+                {% endfor %}
+            </select>
+            <div class="invalid-feedback">Please select a company.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="section">Select Section:</label>
+            <select name="section" id="section" class="form-control" required>
+                <option value="">-- Choose a Section --</option>
+            </select>
+            <div class="invalid-feedback">Please select a section.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="message">Your Message:</label>
+            <textarea name="message" id="message" class="form-control" rows="4" required></textarea>
+            <div class="invalid-feedback">Please enter your message.</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Send</button>
+
+        {% if error %}
+        <p class="text-danger mt-3">{{ error }}</p>
+        {% endif %}
+    </form>
+</div>
+
+<script>
+    // تحديث الأقسام بناءً على الشركة المختارة
+    document.getElementById('company').addEventListener('change', function() {
+        const companyId = this.value;
+        const sectionDropdown = document.getElementById('section');
+
+        fetch(`/get_sections/${companyId}/`)
+        .then(response => response.json())
+        .then(data => {
+            sectionDropdown.innerHTML = '<option value="">-- Choose a Section --</option>';
+            data.sections.forEach(section => {
+                const option = document.createElement('option');
+                option.value = section.id;
+                option.textContent = section.name;
+                sectionDropdown.appendChild(option);
+            });
+        });
+    });
+
+    // إضافة التحقق من صحة النموذج
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            var forms = document.getElementsByClassName('needs-validation');
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+{% endblock %}

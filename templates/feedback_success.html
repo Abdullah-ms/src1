@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-body text-center">
+            <h1 class="card-title text-success">Feedback Sent Successfully!</h1>
+            <p class="card-text">Thank you for your feedback. We appreciate your input and will review it shortly.</p>
+            <a href="{% url 'company_list' %}" class="btn btn-primary mt-3">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

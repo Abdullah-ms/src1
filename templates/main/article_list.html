@@ -3,15 +3,28 @@
 {% block content %}
 <div class="container mt-4">
     <h3 class="text-center mb-4">Articles in > ({{ category.name|capfirst }}) > ({{ section.name|capfirst }})</h3>
-    <ul class="list-group list-group-horizontal">
+    <div class="row">
         {% for article in articles %}
-        <li class="list-group-item d-flex align-items-center">
-            <a href="{% url 'subarticle_list' article.id category.id section.id %}" class="text-decoration-none d-flex align-items-center">
-                <img src="{{ article.logo.url }}" alt="{{ article.title }} Logo" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
-                <span class="ml-3">{{ article.title }}</span>
-            </a>
-        </li>
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm article-card">
+                <a href="{% url 'subarticle_list' article.id category.id section.id %}" class="text-decoration-none">
+                    <img src="{{ article.logo.url }}" alt="{{ article.title }} Logo" class="card-img-top" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ article.title }}</h5>
+                    </div>
+                </a>
+            </div>
+        </div>
         {% endfor %}
-    </ul>
+    </div>
 </div>
+
+<style>
+.article-card {
+    transition: transform 0.3s;
+}
+.article-card:hover {
+    transform: scale(1.05);
+}
+</style>
 {% endblock %}

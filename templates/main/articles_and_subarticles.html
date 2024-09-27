@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid mt-4" dir="rtl">
+    <div class="row">
+        <div class="col-md-3 order-md-2">
+            <h4 class="text-center mb-4">Choose articles</h4>
+            <ul class="list-group">
+                {% for article in articles %}
+                <li class="list-group-item {% if forloop.counter0|divisibleby:2 %}bg-light-article{% else %}bg-dark-article{% endif %} {% if selected_article and selected_article.id == article.id or not selected_article and forloop.first %}fw-bold{% endif %}">
+                    <a href="?article_id={{ article.id }}" class="article-link text-decoration-none">
+                        {{ forloop.counter }}. {{ article.title }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col-md-9 order-md-1">
+            {% if selected_article %}
+            <h4 class="text-center mb-4">articles in ({{ selected_article.title|capfirst }})</h4>
+            <div class="subarticle-list">
+                {% for subarticle in subarticles %}
+                <div class="card mb-3 {% if forloop.counter0|divisibleby:2 %}bg-light-subarticle{% else %}bg-dark-subarticle{% endif %} {% if selected_article and selected_article.id == subarticle.id %}selected-article{% endif %}">
+                    <details>
+                        <summary class="card-header">{{ forloop.counter }}. {{ subarticle.title }}</summary>
+                        <div class="card-body">
+                            <div class="subarticle-content">
+                                {{ subarticle.content|safe }}
+                            </div>
+                            <small style="color: #00a3f4;">updated at: {{ subarticle.updated_at|date:"d/m/Y" }}</small>
+                        </div>
+                    </details>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <h4 class="text-center mb-4">sub articles in ({{ articles.first.title|capfirst }})</h4>
+            <div class="subarticle-list">
+                {% for subarticle in articles.first.sub_articles.all %}
+                <div class="card mb-3 {% if forloop.counter0|divisibleby:2 %}bg-light-subarticle{% else %}bg-dark-subarticle{% endif %}">
+                    <details>
+                        <summary class="card-header">{{ forloop.counter }}. {{ subarticle.title }}</summary>
+                        <div class="card-body">
+                            <div class="subarticle-content">
+                                {{ subarticle.content|safe }}
+                            </div>
+                            <small style="color: lightblue;">last update : {{ subarticle.created_at|date:"d/m/Y" }}</small>
+                        </div>
+                    </details>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-light-article {
+        background-color: #f8f9fa;
+        color: #000000;
+    }
+
+    .bg-dark-article {
+        background-color: #343a40;
+        color: #ffffff;
+    }
+
+    .bg-light-subarticle {
+        background-color: #e9ecef;
+        color: #000000;
+    }
+
+    .bg-dark-subarticle {
+        background-color: #495057;
+        color: #ffffff;
+    }
+
+    .article-link {
+        color: inherit;
+    }
+
+    .article-link:hover {
+        text-decoration: underline;
+    }
+
+    .selected-article {
+        border: 2px solid green;
+        background-color: #d4edda;
+    }
+
+    .container-fluid {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .row {
+        margin-left: 0;
+        margin-right: 0;
+    }
+</style>
+{% endblock %}

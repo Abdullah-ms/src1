@@ -1,10 +1,12 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from main.models import Company, Section, Category, Article, SubArticle
 from datetime import datetime
 from wisdom.views import daily_wisdom
 from django.db.models import Q
 from django.utils.html import format_html
+import requests
+from django.http import JsonResponse
 
 
 @login_required
@@ -28,6 +30,8 @@ def company_list(request):
     }
 
     return render(request, 'main/company_list.html', context)
+
+from collections import defaultdict
 
 
 def section_list(request, company_id):
@@ -66,42 +70,35 @@ def category_list(request, section_id):
     return render(request, 'main/category_list.html', context)
 
 
-# عرض المقالات الخاصة بالcategory والsection
-def article_list(request, category_id, section_id):
-    # الحصول على القسم باستخدام ال id
-    section = get_object_or_404(Section, id=section_id)
 
-    # الحصول على الفئة المرتبطة بهذا الsection
+
+def article_list(request, category_id, section_id):
+    # الحصول على القسم والفئة
+    section = get_object_or_404(Section, id=section_id)
     category = get_object_or_404(Category, id=category_id, section=section)
 
-    # الحصول على المقالات المرتبطة بهذه الcategory والsection
+    # الحصول على جميع المقالات المرتبطة بالفئة والقسم
     articles = Article.objects.filter(category=category, section=section, is_active=True)
+
+    # التحقق إذا كان المستخدم قد اختار مقالة معينة
+    article_id = request.GET.get('article_id')
+    selected_article = None
+    subarticles = None
+
+    if article_id:
+        selected_article = get_object_or_404(Article, id=article_id, category=category, section=section)
+        subarticles = SubArticle.objects.filter(article=selected_article, section=section, is_active=True)
 
     context = {
         'section': section,
         'category': category,
         'articles': articles,
-    }
-    return render(request, 'main/article_list.html', context)
-
-
-# عرض المقالات الفرعية الخاصة بالمقالة والcategory واsection
-def subarticle_list(request, article_id, category_id, section_id):
-    # الحصول على الsection
-    section = get_object_or_404(Section, id=section_id)
-
-    # الحصول على المقالة باستخدام الid
-    article = get_object_or_404(Article, id=article_id, category_id=category_id)
-
-    # الحصول على المقالات الفرعية المرتبطة بهذه المقالة والتي تنتمي إلى القسم المحدد
-    subarticles = SubArticle.objects.filter(article=article, section=section, is_active=True)
-
-    context = {
-        'article': article,
+        'selected_article': selected_article,
         'subarticles': subarticles,
-        'section': section,
     }
-    return render(request, 'main/subarticle_list.html', context)
+
+    return render(request, 'main/articles_and_subarticles.html', context)
+
 
 
 @login_required
@@ -168,9 +165,42 @@ def subarticle_history_list(request):
     return render(request, 'main/history_list.html', context)
 
 
-def subarticle_detail(request, subarticle_id):
-    subarticle = get_object_or_404(SubArticle, id=subarticle_id)
-    context = {
-        'subarticle': subarticle,
-    }
-    return render(request, 'main/subarticle_detail.html', context)
+@login_required
+def feedback_view(request):
+    user_companies = request.user.companies.filter(is_active=True)
+
+    if request.method == 'POST':
+        company_id = request.POST.get('company')
+        section_id = request.POST.get('section')
+        message = request.POST.get('message')
+
+        if not message.strip():
+            return render(request, 'feedback.html', {
+                'error': 'Message cannot be empty.',
+                'companies': user_companies,
+            })
+
+        company = Company.objects.get(id=company_id)
+        section = Section.objects.get(id=section_id)
+
+        full_message = f"User: {request.user.username}\nCompany: {company.name}\nSection: {section.name}\nMessage: {message}"
+
+        token = "5857300801:AAFjiBN6KOELO9958Dss-_zj640YNXiZyhc"
+        chat_id = "507239290"
+        url = f"https://api.telegram.org/bot{token}/sendMessage"
+        data = {
+            "chat_id": chat_id,
+            "text": full_message,
+        }
+        requests.post(url, data=data)
+
+        return redirect('feedback_success')
+
+    return render(request, 'feedback.html', {'companies': user_companies})
+
+# لكي احصل على الاقسام بعد اختيار الشركة
+@login_required
+def get_sections(request, company_id):
+    sections = Section.objects.filter(company_id=company_id, is_active=True)
+    sections_data = [{'id': section.id, 'name': section.name} for section in sections]
+    return JsonResponse({'sections': sections_data})
