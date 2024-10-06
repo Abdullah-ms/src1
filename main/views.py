@@ -198,7 +198,6 @@ def feedback_view(request):
 
     return render(request, 'feedback.html', {'companies': user_companies})
 
-# لكي احصل على الاقسام بعد اختيار الشركة
 @login_required
 def get_sections(request, company_id):
     sections = Section.objects.filter(company_id=company_id, is_active=True)
