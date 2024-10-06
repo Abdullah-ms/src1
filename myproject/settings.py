@@ -23,12 +23,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-1o4)te6a(+wie!se$)t_crxyi(s#q9qt8o24bqa^1*t5ux=so$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
 # سنستبدل جدول User الافتراضي بـ CustomUser في صفحة الإدارة
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
+
+LOGIN_URL = '/qcteam/accounts/login/'
+
 
 # Application definition
 
@@ -86,8 +90,8 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "kbase",
         "USER": "postgres",
-        "PASSWORD": "123456",
-        "HOST": "127.0.0.1",
+        "PASSWORD": "Aj122008!@Qc#",
+        "HOST": "localhost",
         "PORT": "5432",
     }
 }
@@ -125,12 +129,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'myproject/static')]
+STATIC_URL = '/qcteam/static/'
+#STATICFILES_DIRS = [os.path.join(BASE_DIR, 'src1/static')]
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = 'media/'
+MEDIA_URL = '/qcteam/media/'
 
 
 
