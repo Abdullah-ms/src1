@@ -34,6 +34,7 @@ def company_list(request):
 from collections import defaultdict
 
 
+@login_required
 def section_list(request, company_id):
     # الحصول على الشركة باستخدام ال id
     company = get_object_or_404(Company, id=company_id)
@@ -52,6 +53,7 @@ def section_list(request, company_id):
     return render(request, 'main/section_list.html', context)
 
 
+@login_required
 def category_list(request, section_id):
     # الحصول على القسم باستخدام ال id
     section = get_object_or_404(Section, id=section_id)
@@ -71,11 +73,15 @@ def category_list(request, section_id):
 
 
 
-
+@login_required
 def article_list(request, category_id, section_id):
     # الحصول على القسم والفئة
     section = get_object_or_404(Section, id=section_id)
     category = get_object_or_404(Category, id=category_id, section=section)
+    
+        # التحقق من أن القسم تابع لشركة تابعة للمستخدم
+    if section.company not in request.user.companies.all():
+        return render(request, 'main/403.html')
 
     # الحصول على جميع المقالات المرتبطة بالفئة والقسم
     articles = Article.objects.filter(category=category, section=section, is_active=True)
