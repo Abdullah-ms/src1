@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from main.models import Company, Section, Category, Article, SubArticle
 from datetime import datetime
 from wisdom.views import daily_wisdom
-from django.db.models import Q
+from django.db.models import Q, Count, Case, When, IntegerField
 from django.utils.html import format_html
 import requests
 from django.http import JsonResponse
@@ -30,6 +30,7 @@ def company_list(request):
     }
 
     return render(request, 'main/company_list.html', context)
+
 
 from collections import defaultdict
 
@@ -72,14 +73,13 @@ def category_list(request, section_id):
     return render(request, 'main/category_list.html', context)
 
 
-
 @login_required
 def article_list(request, category_id, section_id):
     # الحصول على القسم والفئة
     section = get_object_or_404(Section, id=section_id)
     category = get_object_or_404(Category, id=category_id, section=section)
-    
-        # التحقق من أن القسم تابع لشركة تابعة للمستخدم
+
+    # التحقق من أن القسم تابع لشركة تابعة للمستخدم
     if section.company not in request.user.companies.all():
         return render(request, 'main/403.html')
 
@@ -106,46 +106,56 @@ def article_list(request, category_id, section_id):
     return render(request, 'main/articles_and_subarticles.html', context)
 
 
-
 @login_required
 def search_results(request):
     query = request.GET.get('query')
-
-    # الحصول على الشركات الخاصة بالمستخدم الحالي
     user_companies = request.user.companies.all()
 
-    # التحقق من وجود استعلام وشركات مرتبطة
-    if query and user_companies.exists():
-        # فلترة المقالات المرتبطة بالأقسام التابعة لشركات المستخدم (مع الأخذ في الاعتبار العلاقة many-to-many)
-        articles = Article.objects.filter(
-            Q(title__icontains=query),
-            section__company__in=user_companies  # التأكد من أن المقالات ضمن أقسام الشركات المرتبطة بالمستخدم
-        ).distinct()  # إزالة التكرارات إذا وجد أكثر من علاقة بين المقال والقسم
+    try:
+        if query and user_companies.exists():
+            # البحث عن المقالات التي تحتوي على النص الكامل في العنوان
+            articles = Article.objects.filter(
+                Q(title__icontains=query),
+                section__company__in=user_companies
+            ).annotate(
+                match_score=Case(
+                    When(title__icontains=query, then=1),  # إعطاء درجة أعلى للمقالات التي تحتوي على النص بالكامل
+                    output_field=IntegerField()
+                )
+            ).order_by('-match_score')  # ترتيب المقالات حسب درجة التطابق
 
-        # فلترة المقالات الفرعية المرتبطة بمقالات تابعة لشركات المستخدم
-        sub_articles = SubArticle.objects.filter(
-            (Q(title__icontains=query) | Q(content__icontains=query)),
-            section__company__in=user_companies  # التأكد من أن المقالات الفرعية ضمن شركات المستخدم
-        ).distinct()  # إزالة التكرارات
+            # البحث عن المقالات الفرعية التي تحتوي على النص الكامل في العنوان أو المحتوى
+            sub_articles = SubArticle.objects.filter(
+                (Q(title__icontains=query) | Q(content__icontains=query)),
+                section__company__in=user_companies
+            ).annotate(
+                match_score=Case(
+                    When(Q(title__icontains=query) | Q(content__icontains=query), then=1),
+                    output_field=IntegerField()
+                )
+            ).order_by('-match_score')  # ترتيب المقالات الفرعية حسب درجة التطابق
 
-        # وظيفة لتحديد النص
-        def highlight(text, query):
-            highlighted = text.replace(query, f'<span class="highlight">{query}</span>')
-            return format_html(highlighted)
+            # وظيفة لتحديد النص
+            def highlight(text, query):
+                highlighted = text.replace(query, f'<span class="highlight">{query}</span>')
+                return format_html(highlighted)
 
-        # تحديد النص في العناوين والمحتوى
-        for article in articles:
-            article.title = highlight(article.title, query)
-            for sub_article in article.sub_articles.all():
+            # تحديد النص في العناوين والمحتوى
+            for article in articles:
+                article.title = highlight(article.title, query)
+                for sub_article in article.subarticle_set.all():
+                    sub_article.title = highlight(sub_article.title, query)
+                    sub_article.content = highlight(sub_article.content, query)
+
+            for sub_article in sub_articles:
                 sub_article.title = highlight(sub_article.title, query)
                 sub_article.content = highlight(sub_article.content, query)
 
-        for sub_article in sub_articles:
-            sub_article.title = highlight(sub_article.title, query)
-            sub_article.content = highlight(sub_article.content, query)
-    else:
-        articles = []  # إذا لم تكن هناك نتائج، تفريغ القائمة
-        sub_articles = []  # إذا لم تكن هناك نتائج، تفريغ القائمة
+        else:
+            articles = []
+            sub_articles = []
+    except Exception as e:
+        return render(request, 'main/error.html', {'message': f'حدث خطأ: {str(e)}'})
 
     return render(request, 'main/search_results.html', {
         'articles': articles,
@@ -177,7 +187,7 @@ def feedback_view(request):
 
     if request.method == 'POST':
         company_id = request.POST.get('company')
-        section_id = request.POST.get('section')
+        # section_id = request.POST.get('section')
         message = request.POST.get('message')
 
         if not message.strip():
@@ -187,9 +197,9 @@ def feedback_view(request):
             })
 
         company = Company.objects.get(id=company_id)
-        section = Section.objects.get(id=section_id)
+        # section = Section.objects.get(id=section_id)
 
-        full_message = f"User: {request.user.username}\nCompany: {company.name}\nSection: {section.name}\nMessage: {message}"
+        full_message = f"User: {request.user.username}\nCompany: {company.name}\nMessage: {message}"
 
         token = "5857300801:AAFjiBN6KOELO9958Dss-_zj640YNXiZyhc"
         chat_id = "507239290"
@@ -203,6 +213,7 @@ def feedback_view(request):
         return redirect('feedback_success')
 
     return render(request, 'feedback.html', {'companies': user_companies})
+
 
 @login_required
 def get_sections(request, company_id):

@@ -8,8 +8,7 @@
     {% if wisdom %}
     <div class="ticker-wrap">
         <div class="ticker">
-            <div class="ticker-item"><span style="color:lightblue">Wisdom of the day:</span> {{ wisdom.text|capfirst }}
-                - <small style="grey"><span style="color:lightblue">{{ wisdom.author|capfirst }}</span></small></div>
+            <div class="ticker-item">{{ wisdom.text|capfirst }}</div>
         </div>
     </div>
     {% endif %}
@@ -41,4 +40,3 @@
     </div>
 </div>
 {% endblock %}
-

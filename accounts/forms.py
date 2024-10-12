@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from accounts.models import CustomUser
 from employee.models import Employee
+from django.contrib.auth.forms import PasswordChangeForm
 
 class CustomUserCreationForm(UserCreationForm):
     username = forms.CharField(max_length=255)
@@ -28,3 +29,17 @@ class CustomUserCreationForm(UserCreationForm):
             user.role = employee.role  # تحديث الدور
             user.save()
         return user
+
+
+
+    # تغيير باسورد
+class CustomUserProfileForm(forms.ModelForm):
+    username = forms.CharField(disabled=True)
+    class Meta:
+        model = CustomUser
+        fields = ('username',)
+
+class CustomPasswordChangeForm(PasswordChangeForm):
+    old_password = forms.CharField(widget=forms.PasswordInput, label="Current Password")
+    new_password1 = forms.CharField(widget=forms.PasswordInput, label="New Password")
+    new_password2 = forms.CharField(widget=forms.PasswordInput, label="Confirm the new password")

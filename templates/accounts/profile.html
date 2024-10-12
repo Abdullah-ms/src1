@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header text-center">
+                    <h4 class="update-profile-title">Update Your Profile</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ profile_form.as_p }}
+                        {{ password_form.as_p }}
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-success" style="background-color: #28a745;">Save the
+                                new password
+                            </button>
+                        </div>
+                    </form>
+                    {% if messages %}
+                    <ul class="messages mt-3">
+                        {% for message in messages %}
+                        <li class="alert {{ message.tags }} mt-1 mb-1">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .update-profile-title {
+            padding : 5px ;
+            background: linear-gradient(45deg, #ff6b6b, #f06595, #5c7cfa, #339af0, #22b8cf);
+    }
+</style>
+{% endblock %}
