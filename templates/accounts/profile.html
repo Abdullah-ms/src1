@@ -6,7 +6,7 @@
         <div class="col-md-6">
             <div class="card shadow-sm">
                 <div class="card-header text-center">
-                    <h4 class="update-profile-title">Update Your Profile</h4>
+                    <h4 class="gradient-text">Change Your Password</h4>
                 </div>
                 <div class="card-body">
                     <form method="POST">
@@ -14,7 +14,7 @@
                         {{ profile_form.as_p }}
                         {{ password_form.as_p }}
                         <div class="text-center mt-3">
-                            <button type="submit" class="btn btn-success" style="background-color: #28a745;">Save the
+                            <button type="submit" class="btn btn-success gradient-text pb-2">Save the
                                 new password
                             </button>
                         </div>
@@ -31,11 +31,4 @@
         </div>
     </div>
 </div>
-
-<style>
-    .update-profile-title {
-            padding : 5px ;
-            background: linear-gradient(45deg, #ff6b6b, #f06595, #5c7cfa, #339af0, #22b8cf);
-    }
-</style>
 {% endblock %}

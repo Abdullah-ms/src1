@@ -133,7 +133,7 @@ header {
 
 .feedback-btn {
     position: fixed;
-    bottom: 20px;
+    bottom: 25px;
     right: 20px;
     background: linear-gradient(45deg, #ff6b6b, #f06595, #5c7cfa, #339af0, #22b8cf);
     border-radius: 50%;
@@ -142,8 +142,15 @@ header {
 }
 
 .feedback-btn img {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
+}
+
+.rotating-text {
+    position: fixed;
+    bottom: 1px;
+    right: 1px;
+    font-size: 10px;
 }
 
 .feedback-btn:hover {
@@ -201,7 +208,7 @@ padding-bottom : 2px;
     </div>
 </header>
 
-<div id="content">
+<div>
     {% block content %}
     {% endblock %}
 </div>
@@ -209,6 +216,10 @@ padding-bottom : 2px;
 <a href="{% url 'feedback' %}" class="feedback-btn">
     <img src="{% static 'img/telegram.png' %}" alt="Feedback"/>
 </a>
+
+    <div class="rotating-text gradient-text" style="font-family: 'Lucida Console', monospace;">
+        Technical Support Quality 2024
+    </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
