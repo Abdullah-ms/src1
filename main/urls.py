@@ -17,4 +17,5 @@ urlpatterns = [
     path('feedback/', views.feedback_view, name='feedback'),
     path('feedback/success/', TemplateView.as_view(template_name='feedback_success.html'), name='feedback_success'),
     path('get_sections/<int:company_id>/', views.get_sections, name='get_sections'),
+
 ]

@@ -8,7 +8,8 @@
         <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
             <div class="card h-100">
                 <a href="{% url 'article_list' category.id section.id %}" class="stretched-link text-decoration-none">
-                    <img src="{{ category.logo.url }}" alt="{{ category.name }} Logo" class="card-img-top img-fluid" style="object-fit: cover; height: 300px;">
+                    <img src="{{ category.logo.url }}" alt="{{ category.name }} Logo" class="card-img-top img-fluid"
+                         style="object-fit: cover; height: 300px;">
                     <div class="card-body">
                         <h5 class="card-title text-center ">{{ category.name|capfirst }}</h5>
                     </div>
@@ -18,4 +19,48 @@
         {% endfor %}
     </div>
 </div>
+
+
+<hr>
+
+{% if groups %}
+<h3 class="text-center mb-4">{{ section.name|capfirst }} Agents</h3>
+<div class="text-center">
+    {% for group in groups %}
+    <a href="?group_id={{ group.id }}"
+       class="btn btn-primary mt-2 mb-2 {% if group.id|stringformat:'s' == selected_group %}active-group{% endif %}"
+       style="{% if group.id|stringformat:'s' == selected_group %}background-color: #ffcc00; color: #000;{% endif %}">
+        {{ group.name }}
+    </a>
+    {% endfor %}
+</div>
+{% endif %}
+
+<br>
+{% if agents.exists %}
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Number</th>
+        <th>Name</th>
+        <th>Region</th>
+        <th>Phone</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for agent in agents %}
+    <tr>
+        <td>{{ agent.number }}</td>
+        <td>{{ agent.name }}</td>
+        <td>{{ agent.region }}</td>
+        <td>{{ agent.phone }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="text-center"> </p>
+{% endif %}
+
 {% endblock %}

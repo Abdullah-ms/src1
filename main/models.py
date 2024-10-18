@@ -112,3 +112,23 @@ class SubArticle(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
+
+
+#-----------------------------------------------------
+
+class AgentGroup(models.Model):
+    name = models.CharField(max_length=100)
+    section = models.ForeignKey(Section, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+class Agent(models.Model):
+    number = models.CharField(max_length=100, blank=True, null=True)
+    name = models.CharField(max_length=100)
+    region = models.CharField(max_length=100)
+    phone = models.TextField()
+    group = models.ForeignKey(AgentGroup, on_delete=models.CASCADE)
+    section = models.ForeignKey(Section, on_delete=models.CASCADE)
+
+

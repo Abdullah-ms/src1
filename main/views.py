@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from main.models import Company, Section, Category, Article, SubArticle
+from main.models import Company, Section, Category, Article, SubArticle,Agent, AgentGroup
 from datetime import datetime
 from wisdom.views import daily_wisdom
 from django.db.models import Q, Count, Case, When, IntegerField
@@ -56,21 +56,29 @@ def section_list(request, company_id):
 
 @login_required
 def category_list(request, section_id):
-    # الحصول على القسم باستخدام ال id
     section = get_object_or_404(Section, id=section_id)
 
-    # التحقق من أن القسم تابع لشركة تابعة للمستخدم
     if section.company not in request.user.companies.all():
         return render(request, 'main/403.html')
 
-    # الحصول على الأصناف المرتبطة بهذا القسم فقط
     categories = Category.objects.filter(section=section, is_active=True)
+    groups = AgentGroup.objects.filter(section=section)  # جلب المجموعات المرتبطة بالقسم فقط
+
+    selected_group = request.GET.get('group_id')  # الحصول على المجموعة المختارة من الـ GET parameters
+    if selected_group:
+        agents = Agent.objects.filter(section=section, group_id=selected_group)
+    else:
+        agents = Agent.objects.filter(section=section)  # عرض كل الوكلاء إذا لم يتم اختيار مجموعة
 
     context = {
         'section': section,
         'categories': categories,
+        'agents': agents,
+        'groups': groups,  # تمرير المجموعات المرتبطة بالقسم فقط
+        'selected_group': selected_group,
     }
     return render(request, 'main/category_list.html', context)
+
 
 
 @login_required
@@ -113,18 +121,18 @@ def search_results(request):
 
     try:
         if query and user_companies.exists():
-            # البحث عن المقالات التي تحتوي على النص الكامل في العنوان
+            # البحث عن المقالات
             articles = Article.objects.filter(
                 Q(title__icontains=query),
                 section__company__in=user_companies
             ).annotate(
                 match_score=Case(
-                    When(title__icontains=query, then=1),  # إعطاء درجة أعلى للمقالات التي تحتوي على النص بالكامل
+                    When(title__icontains=query, then=1),
                     output_field=IntegerField()
                 )
-            ).order_by('-match_score')  # ترتيب المقالات حسب درجة التطابق
+            ).order_by('-match_score')
 
-            # البحث عن المقالات الفرعية التي تحتوي على النص الكامل في العنوان أو المحتوى
+            # البحث عن المقالات الفرعية
             sub_articles = SubArticle.objects.filter(
                 (Q(title__icontains=query) | Q(content__icontains=query)),
                 section__company__in=user_companies
@@ -133,14 +141,25 @@ def search_results(request):
                     When(Q(title__icontains=query) | Q(content__icontains=query), then=1),
                     output_field=IntegerField()
                 )
-            ).order_by('-match_score')  # ترتيب المقالات الفرعية حسب درجة التطابق
+            ).order_by('-match_score')
+
+            # البحث عن الوكلاء
+            agents = Agent.objects.filter(
+                Q(name__icontains=query) | Q(region__icontains=query) | Q(phone__icontains=query),
+                section__company__in=user_companies  # تعديل الاستعلام ليتوافق مع العلاقات المتاحة
+            ).annotate(
+                match_score=Case(
+                    When(Q(name__icontains=query) | Q(region__icontains=query) | Q(phone__icontains=query), then=1),
+                    output_field=IntegerField()
+                )
+            ).order_by('-match_score')
 
             # وظيفة لتحديد النص
             def highlight(text, query):
                 highlighted = text.replace(query, f'<span class="highlight">{query}</span>')
                 return format_html(highlighted)
 
-            # تحديد النص في العناوين والمحتوى
+            # تحديد النص في المقالات والمقالات الفرعية
             for article in articles:
                 article.title = highlight(article.title, query)
                 for sub_article in article.subarticle_set.all():
@@ -151,15 +170,21 @@ def search_results(request):
                 sub_article.title = highlight(sub_article.title, query)
                 sub_article.content = highlight(sub_article.content, query)
 
+            # تحديد النص في الوكلاء
+            for agent in agents:
+                agent.name = highlight(agent.name, query)
+
         else:
             articles = []
             sub_articles = []
+            agents = []
     except Exception as e:
-        return render(request, 'main/error.html', {'message': f'حدث خطأ: {str(e)}'})
+        return render(request, 'main/search_error.html', {'message': f'حدث خطأ: {str(e)}'})
 
     return render(request, 'main/search_results.html', {
         'articles': articles,
         'sub_articles': sub_articles,
+        'agents': agents,  # إضافة الوكلاء إلى النتائج
         'query': query
     })
 
