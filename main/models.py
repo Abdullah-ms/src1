@@ -123,6 +123,8 @@ class AgentGroup(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        unique_together = ('name', 'section')
 
 class Agent(models.Model):
     number = models.CharField(max_length=100, blank=True, null=True)

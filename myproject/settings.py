@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'wisdom.apps.WisdomConfig',
     'ckeditor',
     'ckeditor_uploader',
+    'uploaddata.apps.UploaddataConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

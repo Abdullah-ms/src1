@@ -24,4 +24,5 @@ urlpatterns = [
     path('qcteam/accounts/', include('accounts.urls')),
     path('qcteam/', include('main.urls')),
     path('qcteam/ckeditor/', include('ckeditor_uploader.urls')),
+    path('qcteam/uploaddata/', include('uploaddata.urls')),
 ]  # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

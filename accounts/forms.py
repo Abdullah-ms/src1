@@ -22,7 +22,7 @@ class CustomUserCreationForm(UserCreationForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         employee = Employee.objects.get(hr_name=self.cleaned_data['username'])
-        user.is_active = False  # يتم تفعيل الحساب لاحقاً من قبل الإدارة
+        user.is_active = True  # يتم تفعيل الحساب لاحقاً من قبل الإدارة
         if commit:
             user.save()
             user.companies.set(employee.companies.all())  # تحديث الشركات
