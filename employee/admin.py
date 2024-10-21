@@ -43,5 +43,7 @@ class RoleAdmin(admin.ModelAdmin):
 
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
-    list_display = ('full_english_name', 'hr_name', 'section', 'shift', 'direct_manager', 'role', 'status')
+    list_display = ('hr_name','role', 'is_active')
+    list_filter = ['is_active', 'role','direct_manager','section' ]
+    search_fields = ['hr_name',]
     ordering = ('created_at',)

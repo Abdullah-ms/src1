@@ -20,9 +20,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-                  path('qcteam/admin/', admin.site.urls),
-                  path('qcteam/accounts/', include('accounts.urls')),
-                  path('qcteam/', include('main.urls')),
-                  path('qcteam/ckeditor/', include('ckeditor_uploader.urls')),
+    path('qcteam/admin/', admin.site.urls),
+    path('qcteam/accounts/', include('accounts.urls')),
+    path('qcteam/', include('main.urls')),
+    path('qcteam/ckeditor/', include('ckeditor_uploader.urls')),
+    #path('qcteam/uploaddata/', include('uploaddata.urls')),
 
-              ] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]  # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -77,7 +77,6 @@ class Article(models.Model):
     logo = models.ImageField(upload_to='articles_logos/')
     is_active = models.BooleanField(default=True)
 
-
     class Meta:
         ordering = ['title']
 
@@ -114,21 +113,22 @@ class SubArticle(models.Model):
         super().save(*args, **kwargs)
 
 
-#-----------------------------------------------------
+# -----------------------------------------------------
 
 class AgentGroup(models.Model):
     name = models.CharField(max_length=100)
+    is_active = models.BooleanField(default=True)
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
+
 
 class Agent(models.Model):
     number = models.CharField(max_length=100, blank=True, null=True)
     name = models.CharField(max_length=100)
     region = models.CharField(max_length=100)
     phone = models.TextField()
+    is_active = models.BooleanField(default=True)
     group = models.ForeignKey(AgentGroup, on_delete=models.CASCADE)
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
-
-
