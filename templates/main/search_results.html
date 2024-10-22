@@ -2,60 +2,69 @@
 
 {% block content %}
 <br>
-<h1 style="direction: rtl;">نتائج البحث لـ :<span class="gradient-text">  (&nbsp;&nbsp;{{ query }}&nbsp;&nbsp;)  </span></h1>
+<h1 style="direction: rtl;">نتائج البحث لـ :<span class="gradient-text">  (&nbsp;&nbsp;{{ query }}&nbsp;&nbsp;)  </span>
+</h1>
 
 <!-- عرض المقالات الفرعية -->
 {% if sub_articles %}
 <br>
-    <ul style="direction: rtl;">
-        {% for sub_article in sub_articles %}
-        <li>
-            <h3>{{ sub_article.title }}</h3>
-            <p>{{ sub_article.content|safe }}</p>
-            <p style="color:grey"><small><i>You can find it in :</i> <b>
-                {{ sub_article.section.name }}
-                >
-                {{ sub_article.article.category.name }}
-                >
-                {{ sub_article.article.title }}
-            </b> </small></p>
-        </li>
-        <hr>
-        {% endfor %}
-    </ul>
+<ul style="direction: rtl;">
+    {% for sub_article in sub_articles %}
+    <li>
+        <h3>{{ sub_article.title }}</h3>
+        <p>{{ sub_article.content|safe }}</p>
+        <p style="color:grey"><small><i>You can find it in :</i> <b>
+            {{ sub_article.section.name }}
+            >
+            {{ sub_article.article.category.name }}
+            >
+            {{ sub_article.article.title }}
+        </b> </small></p>
+    </li>
+    <hr>
+    {% endfor %}
+</ul>
 {% endif %}
 
 <!-- عرض الوكلاء (Agents) -->
 <br>
 {% if agents %}
-    <ul style="direction: rtl;">
-        {% for agent in agents %}
-        <li>
-            <p>الاسم: {{ agent.name }}</p> <!-- عرض الاسم -->
-            <p>المنطقة: {{ agent.region }}</p> <!-- عرض المنطقة -->
-            <p>رقم الهاتف: {{ agent.phone }}</p> <!-- عرض الهاتف -->
-            <p style="color: lightblue">Group: {{ agent.group.name }}</p> <!-- عرض المجموعة (إذا كانت مرتبطة بـ group) -->
-            <p style="color:grey"><small><i>Related section:</i> <b>{{ agent.section.name }}</b></small></p> <!-- عرض القسم -->
-        </li>
-        <hr>
-        {% endfor %}
-    </ul>
+<ul style="direction: rtl;">
+    {% for agent in agents %}
+    <li>
+        <p>الاسم: {{ agent.name }}</p> <!-- عرض الاسم -->
+        <p>المنطقة: {{ agent.region }}</p> <!-- عرض المنطقة -->
+        <p>رقم الهاتف: {{ agent.phone }}</p> <!-- عرض الهاتف -->
+        <p style="color: lightblue">
+            {% if agent.group %}
+            Group: {{ agent.group.name }}
+            {% else %}
+            Group: Not assigned
+            {% endif %}
+        </p>
+        <p style="color:grey"><small><i>Related section:</i> <b>{{ agent.section.name }}</b></small></p>
+        <!-- عرض القسم -->
+    </li>
+    <hr>
+    {% endfor %}
+</ul>
 
 {% endif %}
 
 
 <!-- رسالة عدم وجود نتائج مطابقة -->
 {% if not sub_articles and not agents %}
-    <p style="direction: rtl;">لا توجد نتائج مطابقة لبحثك.</p>
-    <br>
-    <hr>
-    <p style="direction: rtl;" ><small >  قد يكون سبب عدم وجود نتائج بحث هو : </small></p>
-    <p style="direction: rtl;" ><small > 1- عدم ادخال نص للبحث وترك القيمة فارغة </small></p>
-    <p style="direction: rtl;" ><small > 2- ادخال الكلمات مفصولة باكثر من فراغ </small></p>
-    <p style="direction: rtl;" ><small > 3- عدم كتابة الحرف بالطريقة الصحيحة مثلا كلمة ( إبلاغ وليس ابلاغ ) وكلمة ( الديوانية وليس الديوانيه )  </small></p>
-    <p style="direction: rtl;" ><small  > 4- حاول كتابة كلمة واحدة في حال لم تظهر نتائج للنص الذي تريده </small></p>
-    <br>
-    <p style="direction: rtl;" ><small  > في حال واجهتك مشكلة اخرى يرجى ارسال Feedback 😊 </small></p>
+<p style="direction: rtl;">لا توجد نتائج مطابقة لبحثك.</p>
+<br>
+<hr>
+<p style="direction: rtl;"><small> قد يكون سبب عدم وجود نتائج بحث هو : </small></p>
+<p style="direction: rtl;"><small> 1- عدم ادخال نص للبحث وترك القيمة فارغة </small></p>
+<p style="direction: rtl;"><small> 2- ادخال الكلمات مفصولة باكثر من فراغ </small></p>
+<p style="direction: rtl;"><small> 3- عدم كتابة الحرف بالطريقة الصحيحة مثلا كلمة ( إبلاغ وليس ابلاغ ) وكلمة ( الديوانية
+    وليس الديوانيه ) </small></p>
+<p style="direction: rtl;"><small> 4- حاول كتابة كلمة واحدة في حال لم تظهر نتائج للنص الذي تريده </small></p>
+<br>
+<p style="direction: rtl;"><small> في حال واجهتك مشكلة اخرى يرجى ارسال Feedback 😊 </small></p>
 {% endif %}
 
 {% endblock %}
