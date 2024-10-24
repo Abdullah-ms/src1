@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-1o4)te6a(+wie!se$)t_crxyi(s#q9qt8o24bqa^1*t5ux=so$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -92,9 +92,9 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "kbase2",
+        "NAME": "kbase",
         "USER": "postgres",
-        "PASSWORD": "Aj122008!@Qc#",
+        "PASSWORD": "123456",
         "HOST": "localhost",
         "PORT": "5432",
     }
