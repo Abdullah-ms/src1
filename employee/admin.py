@@ -1,6 +1,9 @@
 from django.contrib import admin
 from .models import Section, Shift, Schedule, DirectManager, Status, Role, Employee
 from django.contrib.auth.models import Permission
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin
+from .resources import EmployeeResource
 
 
 admin.site.register(Permission)
@@ -41,8 +44,16 @@ class RoleAdmin(admin.ModelAdmin):
     ordering = ('name',)
 
 
+#--------------------------------
+
+# export لاضافة ال
+class EmployeeResource(resources.ModelResource):
+    class Meta:
+        model = Employee
+
 @admin.register(Employee)
-class EmployeeAdmin(admin.ModelAdmin):
+class EmployeeAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    resource_class = EmployeeResource
     list_display = ('hr_name','role', 'is_active')
     list_filter = ['is_active', 'role','direct_manager','section' ]
     search_fields = ['hr_name',]
