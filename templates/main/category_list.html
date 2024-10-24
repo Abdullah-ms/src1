@@ -42,19 +42,19 @@
 <table class="table table-striped">
     <thead>
     <tr>
-        <th>Number</th>
         <th>Name</th>
         <th>Region</th>
         <th>Phone</th>
+        <th>Note</th>
     </tr>
     </thead>
     <tbody>
     {% for agent in agents %}
     <tr>
-        <td>{{ agent.number }}</td>
         <td>{{ agent.name }}</td>
         <td>{{ agent.region }}</td>
         <td>{{ agent.phone }}</td>
+        <td>{{ agent.note }}</td>
     </tr>
     {% endfor %}
     </tbody>
