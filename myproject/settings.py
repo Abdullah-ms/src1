@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'wisdom.apps.WisdomConfig',
     'ckeditor',
     'ckeditor_uploader',
-    'import_export',
     'uploaddata.apps.UploaddataConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -52,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'import_export',
 ]
 
 MIDDLEWARE = [
