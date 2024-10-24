@@ -128,14 +128,13 @@ class AgentGroup(models.Model):
 
 
 class Agent(models.Model):
-    number = models.CharField(max_length=100, blank=True, null=True)
     name = models.CharField(max_length=100)
     region = models.CharField(max_length=300)
     phone = models.CharField(max_length=100)
-    note = models.CharField(max_length=300)
+    note = models.CharField(max_length=300, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     group = models.ForeignKey(AgentGroup, on_delete=models.CASCADE)
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ('name', 'region', 'phone','group')
+        unique_together = ('name', 'region', 'phone', 'group')
