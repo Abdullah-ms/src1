@@ -6,12 +6,6 @@ from .resources import CompanyResource, SectionResource, CategoryResource, Artic
     AgentGroupResource, AgentResource
 
 
-# export لاضافة ال
-class CompanyResource(resources.ModelResource):
-    class Meta:
-        model = Company
-
-
 @admin.register(Company)
 class CompanyAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = CompanyResource
@@ -19,12 +13,6 @@ class CompanyAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_filter = ['is_active']
     search_fields = ['name', ]
     ordering = ('name',)
-
-
-# -----------------------------------------
-class SectionResource(resources.ModelResource):
-    class Meta:
-        model = Section
 
 
 @admin.register(Section)
@@ -36,12 +24,6 @@ class SectionAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     ordering = ('name',)
 
 
-# -----------------------------------------
-
-class CategoryResource(resources.ModelResource):
-    class Meta:
-        model = Category
-
 @admin.register(Category)
 class CategoryAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = CategoryResource
@@ -50,12 +32,6 @@ class CategoryAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     search_fields = ['name', ]
     ordering = ('name',)
 
-
-# -----------------------------------------
-
-class ArticleResource(resources.ModelResource):
-    class Meta:
-        model = Article
 
 @admin.register(Article)
 class ArticleAdmin(ImportExportModelAdmin, admin.ModelAdmin):
@@ -66,12 +42,6 @@ class ArticleAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     ordering = ('title',)
 
 
-# -----------------------------------------
-
-class SubArticleResource(resources.ModelResource):
-    class Meta:
-        model = SubArticle
-
 @admin.register(SubArticle)
 class SubArticleAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = SubArticleResource
@@ -80,12 +50,6 @@ class SubArticleAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     search_fields = ['title', ]
     ordering = ('title',)
 
-
-# -----------------------------------------
-
-class AgentGroupResource(resources.ModelResource):
-    class Meta:
-        model = AgentGroup
 
 @admin.register(AgentGroup)
 class AgentGroupAdmin(ImportExportModelAdmin, admin.ModelAdmin):
@@ -96,12 +60,6 @@ class AgentGroupAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     ordering = ('name',)
 
 
-# -----------------------------------------
-
-class AgentResource(resources.ModelResource):
-    class Meta:
-        model = Agent
-
 @admin.register(Agent)
 class AgentAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = AgentResource
@@ -111,5 +69,4 @@ class AgentAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     ordering = ('name',)
 
 
-# -----------------------------------------
 admin.site.site_header = "Knowledge base administration"

@@ -46,11 +46,6 @@ class RoleAdmin(admin.ModelAdmin):
 
 #--------------------------------
 
-# export لاضافة ال
-class EmployeeResource(resources.ModelResource):
-    class Meta:
-        model = Employee
-
 @admin.register(Employee)
 class EmployeeAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = EmployeeResource
